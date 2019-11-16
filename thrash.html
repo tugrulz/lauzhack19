@@ -1,0 +1,133 @@
+// Vertical2
+    var sliderVertical2 = d3
+        .sliderLeft()
+        .min(0)
+        .max(1.0)
+        .height(100)
+        .tickFormat(d3.format('.1%'))
+        .ticks(5)
+        .default(0.0)
+        .on('onchange', val => {
+            d3.select('p#value-vertical2').text(d3.format('.1%')(val));
+            updateResources(val, 1);
+        });
+
+    var gVertical2 = d3
+        .select('div#slider-vertical2')
+        .append('svg')
+        .attr('width', 100)
+        .attr('height', 400)
+        .append('g')
+        .attr('transform', 'translate(60,30)');
+
+    gVertical.call(sliderVertical2);
+
+    d3.select('p#value-vertical2').text(d3.format('.2%')(sliderVertical2.value()));
+
+
+    // Vertical2
+        var sliderVertical2 = d3
+        .sliderLeft()
+        .min(0)
+        .max(1.0)
+        .height(100)
+        .tickFormat(d3.format('.1%'))
+        .ticks(5)
+        .default(0.0)
+        .on('onchange', val => {
+            d3.select('p#value-vertical').text(d3.format('.1%')(val));
+            updateResources(val, 1)
+        });
+
+    var gVertical2 = d3
+        .select('div#slider-vertical2')
+        .append('svg')
+        .attr('width', 100)
+        .attr('height', 400)
+        .append('g')
+        .attr('transform', 'translate(60,30)');
+
+    gVertical.call(sliderVertical2);
+
+    d3.select('p#value-vertical2').text(d3.format('.2%')(sliderVertical2.value()));
+
+    //Vertical3
+        var sliderVertical3 = d3
+        .sliderLeft()
+        .min(0)
+        .max(1.0)
+        .height(100)
+        .tickFormat(d3.format('.1%'))
+        .ticks(5)
+        .default(0.0)
+        .on('onchange', val => {
+            d3.select('p#value-vertical3').text(d3.format('.1%')(val));
+            updateResources(val, 2)
+        });
+
+    var gVertical3 = d3
+        .select('div#slider-vertical3')
+        .append('svg')
+        .attr('width', 100)
+        .attr('height', 400)
+        .append('g')
+        .attr('transform', 'translate(60,30)');
+
+    gVertical.call(sliderVertical);
+
+     /*gVertical.on(end, function (c) {
+         updateResources()
+     });*/
+
+    d3.select('p#value-vertical3').text(d3.format('.2%')(sliderVertical3.value()));
+
+    //Vertical4
+        var sliderVertical4 = d3
+        .sliderLeft()
+        .min(0)
+        .max(1.0)
+        .height(100)
+        .tickFormat(d3.format('.1%'))
+        .ticks(5)
+        .default(0.0)
+        .on('onchange', val => {
+            d3.select('p#value-vertical4').text(d3.format('.1%')(val));
+            updateResources(val, 3)
+        });
+
+    var gVertical4 = d3
+        .select('div#slider-vertical4')
+        .append('svg')
+        .attr('width', 100)
+        .attr('height', 400)
+        .append('g')
+        .attr('transform', 'translate(60,30)');
+
+    gVertical.call(sliderVertical4);
+
+     /*gVertical.on(end, function (c) {
+         updateResources()
+     });*/
+
+    d3.select('p#value-vertical4').text(d3.format('.2%')(sliderVertical4.value()));
+
+
+
+  <div class="container">
+     <section class="slider">
+        <div id="slider-4"></div>
+        <p>
+           <label for="minval4">Minumum value4:</label>
+           <input type="text" id="minval4"
+              style="border:0; color:#b9cd6d; font-weight:bold;">
+        </p>
+     </section>
+     <section class="slider">
+        <div id="slider-5"></div>
+        <p>
+           <label for="minval5">Minumum value5:</label>
+           <input type="text" id="minval5"
+              style="border:0; color:#b9cd6d; font-weight:bold;">
+        </p>
+     </section>
+   </div>

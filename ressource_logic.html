@@ -1,0 +1,118 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<script>
+
+
+  //alert(ress.new_profit)
+  // for (let i = 0; i < 20; i++) {
+  // update_profit(ress);
+  // document.write('Profit: ' + ress.profit + '<br>');
+  // }
+
+  //alert(new_profit(ress))
+
+
+</script>
+</head>
+<body>
+  <div id='ressource'>
+    <img src='arrow.svg', id="arrow", width=50, height=50>
+    <img src='bitcoin.svg', id='bitcoin', width=50, height=50>
+    <p id='profit'>0</p>
+  </div>
+
+  <script>
+    var max_profit = 100
+    var min_profit = - 100
+    var immobile = 100
+    var steps = 100
+    var max_angle_profit = 250
+
+    var available_resources = [
+        { 'title':'Bitcoin', 'src':'bitcoin.svg' },
+      { 'title':'Solar', 'src':'sun.svg' },
+      { 'title':'Wind', 'src':'wind.svg' },
+      { 'title':'Wood', 'src':'wood.svg' },
+      { 'title':'Euro', 'src':'euro.svg' },
+
+    ]
+
+    function add_resource() {
+      var used_resources = []
+      let new_res = Math.floor((Math.random() * available_resources.length))
+      while (used_resources.includes(new_res)) {
+        new_res = Math.floor((Math.random() * available_resources.length))
+      }
+
+      let res = {
+        res_nb: new_res,
+        profit: Math.floor((Math.random() * (max_profit - min_profit)) + min_profit),
+        new_profit: this.profit,
+        steps_left: steps,
+        investment: 2,
+        immobile_left: immobile,
+      }
+      res.new_profit = res.profit
+      resources.push(res)
+    }
+
+
+    function get_money_gain(resources) {
+    let sum = 0;
+    for(let i=0; i < resources.length; i++) {
+        ress = resources[i];
+          sum += ress.profit * ress.investment;
+      }
+      return sum;
+    }
+
+    function new_profit(ress) {
+    let prof = (Math.floor(Math.random()*5 -2) * 50 )
+      return prof;
+    }
+
+    function update_profit(ress) {
+    //Has reached new goal
+      if(ress.profit == ress.new_profit) {
+        ress.immobile_left -= 1;
+        if(ress.immobile_left == 0) {
+            ress.immobile_left = immobile
+            ress.new_profit = new_profit(ress)
+            ress.steps_left = steps
+        }
+        return
+      }
+      //Hasn't reached new goal
+      ress.profit += Math.floor((ress.new_profit - ress.profit) / ress.steps_left)
+      rotate(ress)
+      document.getElementById('profit').innerHTML = ress.profit
+      ress.steps_left -= 1
+
+    }
+
+    function rotate(ress) {
+      var img = document.getElementById('arrow');
+      var angle = - ress.profit / max_angle_profit * 90;
+      img.setAttribute('style','transform:rotate('+ angle + 'deg)');
+    }
+
+    function update() {
+      for(let i=0; i < resources.length; i++) {
+        let res = resources[i];
+        update_profit(res);
+      }
+    }
+
+    var resources = [];
+    add_resource()
+
+    window.setInterval(update, 10)
+
+  </script>
+
+</body>
+</html>

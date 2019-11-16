@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+
+.stopwatch {
+  fill: none;
+  stroke: #231F20;
+  stroke-width: 0.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
+}
+
+.stopwatch-center {
+  fill: #d0d2d3;
+}
+
+</style>
+<head>
+    <title>Bitcoin vs Gruyere</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta charset='utf-8' />
+    <!--<script src="https://d3js.org/d3.v5.min.js"></script>-->
+    <script src="./static/d3.min.js"></script>
+    <script src="./static/d3-timer.min.js"></script>
+    <script src="./static/d3-simple-slider.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+
+
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        #chart {
+            max-width: 600px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<div id='ressource'>
+    <div style="display: inline-block; width: 120px; text-align: right" class="col-sm-2"><img src='./static/images/arrow.svg' , id="arrow" , width=50, height=50>
+<img src='./static/images/bitcoin.svg' , id='bitcoin' , width=50, height=50>
+    <p id='profit'>0</p></div>
+
+
+<div style="display: inline-block; width: 120px; text-align: right" class="col-sm-2"><img src='./static/images/arrow.svg' , id="arrow2" , width=50, height=50>
+<img src='./static/images/gruyere.png' , id='gruyere' , width=50, height=50>
+    <p id='profit2'>0</p>
+
+</div>
+
+<svg width="960" height="250">
+  <g transform="translate(400,150) scale(2.8)">
+    <circle class="stopwatch" cx="23.8" cy="24.1" r="10.1"/>
+    <path class="stopwatch" d="M28.2,15l0.6-1.4c0.9,0.3,1.7,0.8,2.4,1.4l-1,1.3"/>
+    <rect class="stopwatch" x="20.4" y="10.1" width="6.7" height="2.3"/>
+    <line class="stopwatch" x1="22.8" y1="14" x2="22.8" y2="12.4"/>
+    <line class="stopwatch" x1="24.8" y1="12.4" x2="24.8" y2="14"/>
+    <path class="stopwatch stopwatch-center" d=""/>
+  </g>
+</svg>
+
+
+
+
+</div>
+
+    <div id="chart"></div>
+
+
+
+<script src="./static/chartscript.js"></script>
+
+<div class="container">
+
+    <!--<div class="row align-items-center"  style="display: inline-block; width: 120px; text-align: right">
+        <div class="col-sm-2"><p id="value-vertical">AAAAAA</p></div>
+        <div class="col-sm"><div id="slider-vertical"></div></div>
+    </div>-->
+
+    <div class="row align-items-center">
+        <!--<div class="col-sm-2"><p id="value-fill"></p></div>-->
+        <div class="col-sm"><div id="slider-fill"></div></div>
+    </div>
+
+</div>
+
+<script>
+    var lineArr = [];
+    var MAX_LENGTH = 100;
+    var duration_of_graph =500;
+    var time_limit = 60;
+    var make_crazy = 30;
+    var chart = realTimeLineChart();
+    var playerMoney = 100;
+    var resources = [];
+
+    // PLAYER'S MONEY
+    function randomNumberBounds(min, max) {
+        return Math.floor(Math.random() * max) + min;
+    }
+
+
+
+    function playerMoneyLogic(){
+        return get_money_gain(resources)
+        //return Math.floor(Math.random() * 5) -2;
+    }
+
+    function updatePlayerMoney() {
+        console.log(playerMoney);
+        playerMoney += playerMoneyLogic()
+        return playerMoney.toFixed(0)
+    }
+
+    function seedData() {
+        var now = new Date();
+        for (var i = 0; i < MAX_LENGTH; ++i) {
+            lineArr.push({
+                time: new Date(now.getTime() - ((MAX_LENGTH - i) * duration_of_graph)),
+                $: playerMoney
+            });
+        }
+    }
+
+    /*var delay = 150;
+    var t = d3.timer(function(elapsed) {
+        console.log(elapsed);
+        if (elapsed > 5000000) {
+            t.stop();
+            gameOver = true;
+            window.location.replace("http://www.w3schools.com");
+        }
+    }, delay);*/
+
+    window.setTimeout(timeout, time_limit*1000);
+
+    function timeout() {
+    console.log("lalala");
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for("get_post_json") }}",
+            contentType: "application/json",
+            data: JSON.stringify({name: 'newplayer', playerMoney: playerMoney}),
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+        window.location.replace("http://127.0.0.1:5000/scores");
+    }
+
+
+
+    function updateData() {
+        var now = new Date();
+
+        var lineData = {
+            time: now,
+            //x: randomNumberBounds(0, 5),
+            $: updatePlayerMoney(),
+        };
+        lineArr.push(lineData);
+
+        if (lineArr.length > 30) {
+            lineArr.shift();
+        }
+        d3.select("#chart").datum(lineArr).call(chart);
+    }
+
+    function resize() {
+        if (d3.select("#chart svg").empty()) {
+            return;
+        }
+        chart.width(+d3.select("#chart").style("width").replace(/(px)/g, ""));
+        d3.select("#chart").call(chart);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        seedData();
+        window.setInterval(updateData, 500);
+        d3.select("#chart").datum(lineArr).call(chart);
+        d3.select(window).on('resize', resize);
+    });
+
+    // Fill
+    var sliderFill = d3
+        .sliderBottom()
+        .min(0)
+        .max(1.0)
+        .width(300)
+        .tickFormat(d3.format('.1%'))
+        .ticks(5)
+        .default(0.0)
+        .fill('#2196f3')
+        .on('onchange', val => {
+            d3.select('p#value-vertical').text(d3.format('.1%')(val));
+            updateResources(val, 0);
+            updateResources(1-val, 1);
+        });
+
+    var gFill = d3
+        .select('div#slider-fill')
+        .append('svg')
+        .attr('width', 500)
+        .attr('height', 100)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+
+    gFill.call(sliderFill);
+
+    d3.select('p#value-fill').text(d3.format('.2%')(sliderFill.value()));
+
+    // Vertical
+    /*var sliderVertical = d3
+        .sliderLeft()
+        .min(0)
+        .max(1.0)
+        .height(100)
+        .tickFormat(d3.format('.1%'))
+        .ticks(5)
+        .default(0.0)
+        .on('onchange', val => {
+            d3.select('p#value-vertical').text(d3.format('.1%')(val));
+            updateResources(val, 0)
+        });
+
+    var gVertical = d3
+        .select('div#slider-vertical')
+        .append('svg')
+        .attr('width', 100)
+        .attr('height', 400)
+        .append('g')
+        .attr('transform', 'translate(60,30)');
+
+    gVertical.call(sliderVertical);*/
+
+     /*gVertical.on(end, function (c) {
+         updateResources()
+     });*/
+
+    //d3.select('p#value-vertical').text(d3.format('.2%')(sliderVertical.value()));
+
+    function updateResources(val, whichslider) {
+        resources[whichslider].investment = val;
+        console.log(whichslider)
+        console.log(val);
+    }
+
+
+    // LOUIS //
+    //////////
+
+    var max_profit = 100
+    var min_profit = - 100
+    var immobile = 50
+    var steps = 50
+    var max_angle_profit = 250
+
+    var available_resources = [
+        { 'title':'Bitcoin', 'src':'bitcoin.svg' },
+      { 'title':'Solar', 'src':'sun.svg' },
+      { 'title':'Wind', 'src':'wind.svg' },
+      { 'title':'Wood', 'src':'wood.svg' },
+      { 'title':'Euro', 'src':'euro.svg' },
+
+    ]
+
+    function add_resource(id, arrow_id, multiplier, stability) {
+      //var used_resources = []
+      //var new_res = Math.floor((Math.random() * available_resources.length))
+      //while (used_resources.includes(new_res)) {
+      //  new_res = Math.floor((Math.random() * available_resources.length))
+      //}
+
+      var res = {
+        //res_nb: new_res, //
+          multiplier:multiplier,
+          stability:stability,
+        profit: Math.floor((Math.random() * (max_profit - min_profit) * multiplier) + min_profit + stability),
+        new_profit: this.profit,
+        steps_left: steps,
+        investment: sliderFill.value(), // link to the slider
+        immobile_left: immobile,
+          id:id,
+          arrow:arrow_id
+      };
+      res.new_profit = res.profit
+      resources.push(res)
+    }
+
+
+    function get_money_gain(resources) {
+    var sum = 0;
+    for(var i=0; i < resources.length; i++) {
+        ress = resources[i];
+          sum += ress.profit * ress.investment;
+      }
+      return sum;
+    }
+
+    function new_profit(ress) {
+    var prof = Math.floor((Math.random() * (max_profit - min_profit) * ress.multiplier) + min_profit + ress.stability)
+      return prof;
+    }
+
+    function update_profit(ress) {
+    //Has reached new goal
+      if(ress.profit == ress.new_profit) {
+        ress.immobile_left -= 1;
+        if(ress.immobile_left == 0) {
+            ress.immobile_left = immobile
+            ress.new_profit = new_profit(ress)
+            ress.steps_left = steps
+        }
+        return
+      }
+      //Hasn't reached new goal
+      ress.profit += Math.floor((ress.new_profit - ress.profit) / ress.steps_left)
+      rotate(ress)
+      document.getElementById(ress.id).innerHTML = ress.profit
+      ress.steps_left -= 1
+
+    }
+
+    function rotate(ress) {
+      var img = document.getElementById(ress.arrow);
+      var angle = - ress.profit / max_angle_profit * 90;
+      img.setAttribute('style','transform:rotate('+ angle + 'deg)');
+    }
+
+    function update() {
+      for(var i=0; i < resources.length; i++) {
+        var res = resources[i];
+        update_profit(res);
+      }
+    }
+
+    add_resource("profit", "arrow", 1,0);
+    add_resource("profit2","arrow2",0.4, 80);
+
+    window.setInterval(update, 10);
+
+    window.setTimeout(make_crazy_out, make_crazy*1000);
+
+    function make_crazy_out() {
+        console.log("CORAAAAAZY");
+        max_profit = max_profit*2;
+        min_profit = min_profit*2;
+
+    }
+
+    /// TIMER
+
+    repeat = 2
+    var duration = time_limit*1000/repeat
+
+
+function draw_stopwatch_arc(angle){
+
+  var r = 7.4
+  var cx = 23.8
+  var cy = 24.1
+
+  var px = r * Math.sin(angle)
+  var py = -1 * r * Math.cos(angle)
+
+  var d = "M" + cx + "," + cy + " "
+  d += "l" + px + "," + py + " "
+  if (angle < Math.PI) {
+    d += "A " + r + " " + r + " 0 0 0 " + (cx) + " " + (cy - r) + " "
+  } else {
+    d += "A " + r + " " + r + " 0 0 0 " + (cx) + " " + (cy + r) + " "
+    d += "A " + r + " " + r + " 0 0 0 " + (cx) + " " + (cy - r) + " "
+  }
+
+  d3.select(".stopwatch-center")
+    .transition().duration(0)
+      .attr("d", d)
+
+}
+
+var stopwatch_timer = false
+function stopwatch_single_turn(duration){
+  if (stopwatch_timer) { stopwatch_timer.stop() }
+  stopwatch_timer = d3.timer(function(t){
+    if (t > duration) { stopwatch_timer.stop() }
+    else { draw_stopwatch_arc(t * 2 * Math.PI / duration) }
+  })
+}
+
+var count = 1
+stopwatch_interval = d3.interval(function(){
+  stopwatch_single_turn(duration)
+  count += 1
+  if (count >= repeat) { stopwatch_interval.stop() }
+}, duration)
+stopwatch_single_turn(duration)
+
+
+</script>
+</body>
+</html>
