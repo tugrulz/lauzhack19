@@ -16,7 +16,7 @@
 <body>
 <style>
 body {text-align: center;
-background-image: url('./static/images/bitcoin.svg');
+background-image: url({{ url_for('static', filename='images/piggy-bank.svg') }})
 }
 
 .back-image {
@@ -49,11 +49,10 @@ background-repeat: repeat;
     </TH>
  </TR>
 
-    {% for key, value in liste.items() %}
-        <li>{{n}}</li>
+    {% for val in liste %}
         <TR>
-            <TH bgcolor=“black”>{{ key }}</TH>
-            <TH bgcolor=“black”>{{ value }}</TH>
+            <TH bgcolor=“black”>{{ val[0] }}</TH>
+            <TH bgcolor=“black”>{{ val[1] }}</TH>
         </TR>
     {% endfor %}
 

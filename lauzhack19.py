@@ -9,7 +9,8 @@ scores_file = '/Users/elmas/PycharmProjects/lauzhack19/scores.txt'
 app = Flask(__name__, static_url_path='/static')
 
 longnames = ['John Jacob Jingle Heimer Schmidt', 'Man with The Longest Name', 'No Buffer Overflow for Old Men', 'Get A Shorter Name Bitch']
-randomnames = ['Mec Chelou', "John Doe", "Mario Rossi", 'Gimli Gloinsson', 'Frodo Baggins', 'Cristiano Ronaldo']
+randomnames = ['Mec Chelou', "John Doe", "Mario Rossi", 'Gimli Gloinsson',
+               'Frodo Baggins', 'Cristiano Ronaldo', 'Tony Montana', 'Chuck Norris', 'Donald Trump', "Martin Vetterli"]
 
 @app.route('/')
 @app.route('/<username>')
@@ -20,7 +21,7 @@ def hello_world(username=""):
     if(username == ""):
         username = random.choice(randomnames)
 
-    print(username)
+    print("Your name was: " + username)
     with open(scores_file, 'a') as f:
         f.write("%s," % (username))
 
@@ -37,7 +38,7 @@ def update_scoreboard():
         score = splitted[1]
         scores.append((name, score))
 
-    scores = sorted(scores, key=lambda x: x[1])
+    scores = sorted(scores, key=lambda x: int(x[1]), reverse=True)
     print(scores)
     if (len(scores) > 10):
         scores = scores[0:9] + [scores[-1]]
@@ -71,16 +72,19 @@ def hello():
     # with open('scores.txt', 'a') as f:
     #     f.write("%s" % name_and_score)
 
-    liste = {}
-    update_scoreboard()
+    liste = []
+    # update_scoreboard()
     with open(scores_file, 'r') as f:
         for line in f:
             line = line.strip()
             splitted = line.split(',')
-            liste[splitted[0]] = splitted[1]
+            liste.append((splitted[0],splitted[1]))
+            # liste[splitted[0]] = splitted[1]
 
     return render_template('scores.html', liste = liste)
 
 
 if __name__ == '__main__':
-    app.run("0.0.0.0")
+    # app.run("0.0.0.0")
+    app.run()
+    # app.run("0.0.0.0")
