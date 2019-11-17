@@ -1,5 +1,2 @@
-newplayer,100
-newplayer,-644
-newplayer,100
-newplayer,1086
-newplayer,100
+Mario Rossi,100
+Cristiano Ronaldo,100

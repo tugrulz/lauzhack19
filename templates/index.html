@@ -57,8 +57,8 @@
 
 </div>
 
-<svg width="960" height="250">
-  <g transform="translate(400,150) scale(2.8)">
+<!--<svg width="960" height="240">
+  <g transform="translate(400,150) scale(2.5)">
     <circle class="stopwatch" cx="23.8" cy="24.1" r="10.1"/>
     <path class="stopwatch" d="M28.2,15l0.6-1.4c0.9,0.3,1.7,0.8,2.4,1.4l-1,1.3"/>
     <rect class="stopwatch" x="20.4" y="10.1" width="6.7" height="2.3"/>
@@ -66,7 +66,7 @@
     <line class="stopwatch" x1="24.8" y1="12.4" x2="24.8" y2="14"/>
     <path class="stopwatch stopwatch-center" d=""/>
   </g>
-</svg>
+</svg>-->
 
 
 
@@ -86,9 +86,12 @@
         <div class="col-sm"><div id="slider-vertical"></div></div>
     </div>-->
 
-    <div class="row align-items-center">
+    <div class="row align-items-center ">
         <!--<div class="col-sm-2"><p id="value-fill"></p></div>-->
-        <div class="col-sm"><div id="slider-fill"></div></div>
+        <div class="col-sm slider"><div id="slider-fill"></div></div>
+
+        <div class="col-sm slider2"><div id="slider-fill"></div></div>
+
     </div>
 
 </div>
@@ -97,7 +100,7 @@
     var lineArr = [];
     var MAX_LENGTH = 100;
     var duration_of_graph =500;
-    var time_limit = 60;
+    var time_limit = 1;
     var make_crazy = 30;
     var chart = realTimeLineChart();
     var playerMoney = 100;
@@ -130,7 +133,8 @@
             });
         }
     }
-
+        var base_url = window.location.origin;
+        console.log(base_url);
     /*var delay = 150;
     var t = d3.timer(function(elapsed) {
         console.log(elapsed);
@@ -147,7 +151,8 @@
     console.log("lalala");
         $.ajax({
             type: "POST",
-            url: "{{ url_for("get_post_json") }}",
+            url: "{{ url_for("get_post_json", external = True) }}",
+            //url: base_url + "/get_post_json",
             contentType: "application/json",
             data: JSON.stringify({name: 'newplayer', playerMoney: playerMoney}),
             dataType: "json",
@@ -158,7 +163,9 @@
                 console.log(err);
             }
         });
-        window.location.replace("http://127.0.0.1:5000/scores");
+
+        var scores_url = base_url + "/scores"
+        window.location.replace(scores_url);
     }
 
 
@@ -199,7 +206,7 @@
         .sliderBottom()
         .min(0)
         .max(1.0)
-        .width(300)
+        .width(750)
         .tickFormat(d3.format('.1%'))
         .ticks(5)
         .default(0.0)
@@ -207,20 +214,41 @@
         .on('onchange', val => {
             d3.select('p#value-vertical').text(d3.format('.1%')(val));
             updateResources(val, 0);
-            updateResources(1-val, 1);
         });
 
     var gFill = d3
         .select('div#slider-fill')
         .append('svg')
-        .attr('width', 500)
-        .attr('height', 100)
+        .attr('width', 800)
+        .attr('height', 70)
         .append('g')
         .attr('transform', 'translate(30,30)');
 
     gFill.call(sliderFill);
 
-    d3.select('p#value-fill').text(d3.format('.2%')(sliderFill.value()));
+    // Fill
+    var sliderFill2 = d3
+        .sliderBottom()
+        .min(0)
+        .max(1.0)
+        .width(750)
+        .tickFormat(d3.format('.1%'))
+        .ticks(5)
+        .default(0.0)
+        .fill('#2196f3')
+        .on('onchange', val => {
+            updateResources(val, 1);
+        });
+
+    var gFill2 = d3
+        .select('.slider2')
+        .append('svg')
+        .attr('width', 800)
+        .attr('height', 70)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+
+    gFill2.call(sliderFill2);
 
     // Vertical
     /*var sliderVertical = d3
@@ -364,7 +392,7 @@
     /// TIMER
 
     repeat = 2
-    var duration = time_limit*1000/repeat
+    var duration = time_limit*1000/repeat;
 
 
 function draw_stopwatch_arc(angle){

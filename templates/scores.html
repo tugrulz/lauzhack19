@@ -1,26 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Flask Template Example</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <style type="text/css">
-      .container {
-        max-width: 500px;
-        padding-top: 100px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <p>My string: {{"Scoreboard"}}</p>
-      <ul>
-        {% for n in liste %}
+<head>
+  <div class=“border”>
+  <title>Scoreboard</title>
+  <meta name=“viewport” content=“width=device-width, initial-scale=1.0”>
+<link href=“http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css” rel=“stylesheet” media=“screen”>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style type=“text/css”>
+    .container {
+      max-width: 500px;
+      padding-top: 100px;
+    }
+  </style>
+</head>
+<body>
+<style>
+body {text-align: center;
+background-image: url('./static/images/bitcoin.svg');
+}
+
+.back-image {
+height: 100px;
+background-repeat: repeat;
+}
+
+.x {
+  background: #fff;
+  width: 350px;
+  height: 100%;
+  padding-left: 2%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
+<div class='back-image'>
+<div class="x">
+  <div class=“container”>
+    <body style=“background-color:silver;“>
+	    <font size="10" color=“orange” font face=“verdana”>
+    <p style=“text-align:center;“><b>Bitcoin vs Gruyere Scoreboard</b></p>
+    </font>
+<TABLE BORDER=“5" width=“50%” cellpadding=“7" cellspacing=“4” bgcolor='#00FF00' align='center'>
+ <TR>
+    <TH COLSPAN=“2">
+       <H3>Leaderboard<BR></H3>
+    </TH>
+ </TR>
+
+    {% for key, value in liste.items() %}
         <li>{{n}}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  </body>
+        <TR>
+            <TH bgcolor=“black”>{{ key }}</TH>
+            <TH bgcolor=“black”>{{ value }}</TH>
+        </TR>
+    {% endfor %}
+
+</TABLE>
+
+  </div>
+  <script src=“http://code.jquery.com/jquery-1.10.2.min.js”></script>
+  <script src=“http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js”></script>
+</body>
+</div>
+</div>
+</div>
 </html>
