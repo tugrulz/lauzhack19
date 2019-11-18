@@ -9,7 +9,7 @@ scores_file = '/Users/elmas/PycharmProjects/lauzhack19/scores.txt'
 app = Flask(__name__, static_url_path='/static')
 
 longnames = ['John Jacob Jingle Heimer Schmidt', 'Man with The Longest Name', 'No Buffer Overflow for Old Men', 'Get A Shorter Name Bitch']
-randomnames = ['Mec Chelou', "John Doe", "Mario Rossi", 'Gimli Gloinsson',
+randomnames = ['Mec Chelou', "John Doe", "Mario Rossi", 'Gimli Gloinsson', 'Recep Tayyip Erdoğan', 'Mahatma Gandhi', 'Hakuna Matata',
                'Frodo Baggins', 'Cristiano Ronaldo', 'Tony Montana', 'Chuck Norris', 'Donald Trump', "Martin Vetterli"]
 
 @app.route('/')
@@ -21,9 +21,9 @@ def hello_world(username=""):
     if(username == ""):
         username = random.choice(randomnames)
 
-    print("Your name was: " + username)
-    with open(scores_file, 'a') as f:
-        f.write("%s," % (username))
+    # print("Your name was: " + username)
+    # with open(scores_file, 'a') as f:
+    #     f.write("%s," % (username))
 
     return render_template('index.html')
 
@@ -63,12 +63,15 @@ def get_post_json():
 
     with open(scores_file, 'a') as f:
         print((str(score).split('.')[0]))
-        f.write("%s\n" % (str(score).split('.')[0]))
+        f.write("%s, %s\n" % (name, str(score).split('.')[0]))
 
     return jsonify(status="success", data=data)
 
 @app.route('/scores/')
+# @app.route('/scores/<name_and_score>')
 def hello():
+    # name_and_score = '.'.join(name_and_score.split('.')[:-1])
+    #
     # with open('scores.txt', 'a') as f:
     #     f.write("%s" % name_and_score)
 
@@ -85,6 +88,6 @@ def hello():
 
 
 if __name__ == '__main__':
-    # app.run("0.0.0.0")
-    app.run()
+    app.run("0.0.0.0")
+    # app.run()
     # app.run("0.0.0.0")

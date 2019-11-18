@@ -100,7 +100,7 @@
     var lineArr = [];
     var MAX_LENGTH = 100;
     var duration_of_graph =500;
-    var time_limit = 60;
+    var time_limit = 5;
     var make_crazy = 30;
     var chart = realTimeLineChart();
     var playerMoney = 100;
@@ -134,6 +134,10 @@
         }
     }
         var base_url = window.location.origin;
+        var parts = window.location.href.split("/");
+        var playerName = parts[parts.length - 1];
+        console.log(playerName)
+
         console.log(base_url);
     /*var delay = 150;
     var t = d3.timer(function(elapsed) {
@@ -155,7 +159,7 @@
             url: "{{ url_for("get_post_json", external = True) }}",
             //url: base_url + "/get_post_json",
             contentType: "application/json",
-            data: JSON.stringify({name: 'newplayer', playerMoney: playerMoney}),
+            data: JSON.stringify({name: playerName, playerMoney: playerMoney}),
             dataType: "json",
             success: function(response) {
                 console.log(response);
@@ -165,7 +169,7 @@
             }
         });
 
-        var scores_url = base_url + "/scores"
+        var scores_url = base_url + "/scores/" //+ "," + playerMoney;
         window.location.replace(scores_url);
     }
 
